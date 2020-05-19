@@ -15,27 +15,27 @@ device = None
 app = Flask(__name__)
 
 def load_model():
-		global model_large
-		global tokenizer_large
-		global model_small
-		global tokenizer_small
-		global device
-		# Download and save the models:
-		# Large
-		# model = T5ForConditionalGeneration.from_pretrained('t5-large')
-		# model.save_pretrained('./large')
-		# tokenizer.save_pretrained('./large')
-		# Small
-		# model = T5ForConditionalGeneration.from_pretrained('t5-small')
-		# model.save_pretrained('./small')
-		# tokenizer.save_pretrained('./small')
-		print ("loading models...")
-		model_large = T5ForConditionalGeneration.from_pretrained('./large')
-		tokenizer_large = T5Tokenizer.from_pretrained('./large')
-		model_small = T5ForConditionalGeneration.from_pretrained('./small')
-		tokenizer_small = T5Tokenizer.from_pretrained('./small')
-		device = torch.device('cpu')
-		print ("models loaded...")
+	global model_large
+	global tokenizer_large
+	global model_small
+	global tokenizer_small
+	global device
+	# Download and save the models:
+	# Large
+	# model = T5ForConditionalGeneration.from_pretrained('t5-large')
+	# model.save_pretrained('./large')
+	# tokenizer.save_pretrained('./large')
+	# Small
+	# model = T5ForConditionalGeneration.from_pretrained('t5-small')
+	# model.save_pretrained('./small')
+	# tokenizer.save_pretrained('./small')
+	print ("loading models...")
+	model_large = T5ForConditionalGeneration.from_pretrained('./large')
+	tokenizer_large = T5Tokenizer.from_pretrained('./large')
+	model_small = T5ForConditionalGeneration.from_pretrained('./small')
+	tokenizer_small = T5Tokenizer.from_pretrained('./small')
+	device = torch.device('cpu')
+	print ("models loaded...")
 
 def getTextFromRequest(request):
 	data = request.get_json()
@@ -46,11 +46,11 @@ def getTextFromRequest(request):
 def getSummary(tokenizer, model, prepared_text):
 	tokenized_text = tokenizer.encode(prepared_text, return_tensors="pt").to(device)
 	summary_ids = model.generate(tokenized_text,
-																			num_beams=4,
-																			no_repeat_ngram_size=2,
-																			min_length=30,
-																			max_length=100,
-																			early_stopping=True)
+		num_beams=4,
+		no_repeat_ngram_size=2,
+		min_length=30,
+		max_length=100,
+		early_stopping=True)
 	output = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
 	print ("\n\nSummarized text: \n", output)
 	return output
@@ -68,24 +68,24 @@ def home_endpoint():
 
 @app.route('/large', methods=['POST'])
 def get_large_summary():
-		if hasToken(request) == False: return 'permission denied'
-		start_time = time.time()
-		if request.method == 'POST':
-				t5_prepared_Text = getTextFromRequest(request)
-				output = getSummary(tokenizer_large, model_large, t5_prepared_Text)
-		print("--- %s seconds ---" % (time.time() - start_time))
-		return str(output)
+	if hasToken(request) == False: return 'permission denied'
+	start_time = time.time()
+	if request.method == 'POST':
+			t5_prepared_Text = getTextFromRequest(request)
+			output = getSummary(tokenizer_large, model_large, t5_prepared_Text)
+	print("--- %s seconds ---" % (time.time() - start_time))
+	return str(output)
 
 @app.route('/small', methods=['POST'])
 def get_small_summary():
-		if hasToken(request) == False: return 'permission denied'
-		start_time = time.time()
-		if request.method == 'POST':
-				t5_prepared_Text = getTextFromRequest(request)
-				output = getSummary(tokenizer_small, model_small, t5_prepared_Text)
-		print("--- %s seconds ---" % (time.time() - start_time))
-		return str(output)
+	if hasToken(request) == False: return 'permission denied'
+	start_time = time.time()
+	if request.method == 'POST':
+			t5_prepared_Text = getTextFromRequest(request)
+			output = getSummary(tokenizer_small, model_small, t5_prepared_Text)
+	print("--- %s seconds ---" % (time.time() - start_time))
+	return str(output)
 
 if __name__ == '__main__':
-    load_model()  # load model at the beginning once only
-    app.run(host='0.0.0.0', port=80)
+	load_model()  # load model at the beginning once only
+	app.run(host='0.0.0.0', port=80)
