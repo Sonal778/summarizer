@@ -21,11 +21,11 @@ def load_model():
 	# Download and save the models:
 	# Large
 	model = T5ForConditionalGeneration.from_pretrained('t5-small')
-	model.save_pretrained('./small')
-	tokenizer.save_pretrained('./small')
+	model.save_pretrained('/deploy/small')
+	tokenizer.save_pretrained('/deploy/small')
 	print ("loading models...")
-	model_small = T5ForConditionalGeneration.from_pretrained('./small')
-	tokenizer_small = T5Tokenizer.from_pretrained('./small')
+	model_small = T5ForConditionalGeneration.from_pretrained('/deploy/small')
+	tokenizer_small = T5Tokenizer.from_pretrained('/deploy/small')
 	device = torch.device('cpu')
 	print ("models loaded...")
 
