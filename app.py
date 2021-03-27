@@ -22,13 +22,13 @@ def load_model():
 	global device
 	# Download and save the models:
 	# Large
-	# model = T5ForConditionalGeneration.from_pretrained('t5-large')
-	# model.save_pretrained('./large')
-	# tokenizer.save_pretrained('./large')
-	# Small
-	# model = T5ForConditionalGeneration.from_pretrained('t5-small')
-	# model.save_pretrained('./small')
-	# tokenizer.save_pretrained('./small')
+	model = T5ForConditionalGeneration.from_pretrained('t5-large')
+	model.save_pretrained('./large')
+	tokenizer.save_pretrained('./large')
+	Small
+	model = T5ForConditionalGeneration.from_pretrained('t5-small')
+	model.save_pretrained('./small')
+	tokenizer.save_pretrained('./small')
 	print ("loading models...")
 	model_large = T5ForConditionalGeneration.from_pretrained('./large')
 	tokenizer_large = T5Tokenizer.from_pretrained('./large')
