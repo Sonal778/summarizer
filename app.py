@@ -15,23 +15,15 @@ device = None
 app = Flask(__name__)
 
 def load_model():
-	global model_large
-	global tokenizer_large
 	global model_small
 	global tokenizer_small
 	global device
 	# Download and save the models:
 	# Large
-	model = T5ForConditionalGeneration.from_pretrained('t5-large')
-	model.save_pretrained('./large')
-	tokenizer.save_pretrained('./large')
-	Small
 	model = T5ForConditionalGeneration.from_pretrained('t5-small')
 	model.save_pretrained('./small')
 	tokenizer.save_pretrained('./small')
 	print ("loading models...")
-	model_large = T5ForConditionalGeneration.from_pretrained('./large')
-	tokenizer_large = T5Tokenizer.from_pretrained('./large')
 	model_small = T5ForConditionalGeneration.from_pretrained('./small')
 	tokenizer_small = T5Tokenizer.from_pretrained('./small')
 	device = torch.device('cpu')
@@ -66,15 +58,6 @@ def hasToken(request):
 def home_endpoint():
     return 'Nothing to see here... move along.'
 
-@app.route('/large', methods=['POST'])
-def get_large_summary():
-	if hasToken(request) == False: return 'permission denied'
-	start_time = time.time()
-	if request.method == 'POST':
-			t5_prepared_Text = getTextFromRequest(request)
-			output = getSummary(tokenizer_large, model_large, t5_prepared_Text)
-	print("--- %s seconds ---" % (time.time() - start_time))
-	return str(output)
 
 @app.route('/small', methods=['POST'])
 def get_small_summary():
