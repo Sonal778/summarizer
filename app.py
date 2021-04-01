@@ -19,9 +19,13 @@ def load_model():
 	global tokenizer_small
 	global device
 	# Download and save the models:
-	# Large
-	model_small = T5ForConditionalGeneration.from_pretrained('t5-small')
-	tokenizer_small = T5Tokenizer.from_pretrained('t5-small')
+	# Small
+	model = T5ForConditionalGeneration.from_pretrained('t5-small')
+	model.save_pretrained('./small')
+	tokenizer.save_pretrained('./small')
+	print ("loading models...")
+	model_small = T5ForConditionalGeneration.from_pretrained('./small')
+	tokenizer_small = T5Tokenizer.from_pretrained('./small')
 	print ("loading models...")
 	device = torch.device('cpu')
 	print ("models loaded...")
